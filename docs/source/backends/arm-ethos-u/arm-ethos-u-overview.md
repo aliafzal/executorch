@@ -225,6 +225,9 @@ ExecuTorch for the Ethos-U backend, you automatically install the compiler conta
 
 **→{doc}`/backends/arm-ethos-u/tutorials/arm-ethos-u-tutorials` — Tutorials.**
 
+**→{doc}`/backends/arm-ethos-u/U55_op_support` — Ethos-U55 supported operators.**
+
+**→{doc}`/backends/arm-ethos-u/U85_op_support` — Ethos-U85 supported operators.**
 
 ```{toctree}
 :maxdepth: 2
