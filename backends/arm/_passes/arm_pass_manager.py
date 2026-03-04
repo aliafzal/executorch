@@ -93,6 +93,7 @@ from executorch.backends.arm._passes import (
     DecorateFp32toInt32CastingPass,
     FoldAndAnnotateQParamsPass,
     FuseBatchNorm2dPass,
+    FuseConsecutiveRescalesPass,
     FuseConstantArgsPass,
     FuseDuplicateUsersPass,
     FuseEqualPlaceholdersPass,
@@ -161,8 +162,7 @@ class ArmPassManager(PassManager):
         override_config: ArmPassPipelineConfig | None = None,
     ) -> tuple[type, ...]:
         """Configures the pass manager to skip certain passes based on the
-        ArmPassPipelineConfig class found in the compile spec.
-        """
+        ArmPassPipelineConfig class found in the compile spec."""
         skip_set: set[type] = set()
 
         config = override_config or self.compile_spec.get_pass_pipeline_config()
@@ -191,9 +191,8 @@ class ArmPassManager(PassManager):
         """Validates that necessary passes have run before transforming to
         backend.
 
-        Note that this differs from the original validate_constraints function,
-        which only checks the order of passes.
-
+        Note that this differs from the original validate_constraints
+        function, which only checks the order of passes.
         """
         passes_to_run = defaultdict(list)
 
@@ -263,6 +262,7 @@ class ArmPassManager(PassManager):
                 # Ticket: MLETORCH-1539
                 DecomposeLinearPass(),
                 InsertRescaleInt32Pass(),
+                FuseConsecutiveRescalesPass(),
                 InsertControlFlowRescalesPass(),
                 DecomposeQuantNodesPass(),
             ]
